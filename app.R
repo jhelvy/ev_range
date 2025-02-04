@@ -17,15 +17,15 @@ db <- sd_db_connect()
 server <- function(input, output, session) {
 
   cars <- data.frame(
-    make = c("Chevrolet", "Chevrolet", "Tesla", "Tesla"),
-    model = c("Bolt", "Equinox", "Model S", "Model 3")
+    make_label = c("Chevrolet", "Chevrolet", "Tesla", "Tesla"),
+    model_label = c("Bolt", "Equinox", "Model S", "Model 3")
   )
-  cars$make_lower <- tolower(cars$make)
-  cars$model_lower <- tolower(cars$model)
+  cars$make_value <- tolower(cars$make_label)
+  cars$model_value <- tolower(cars$model_label)
 
-  makes_df <- distinct(cars, make, make_lower)
-  makes <- makes_df$make_lower
-  names(makes) <- makes_df$make
+  makes_df <- distinct(cars, make_label, make_value)
+  makes <- makes_df$make_value
+  names(makes) <- makes_df$make_label
 
   sd_question(
     type   = "select",
@@ -35,9 +35,9 @@ server <- function(input, output, session) {
   )
 
   observe({
-    make_selected_df <- cars[which(input$make == cars$make_lower),]
-    models <- make_selected_df$model_lower
-    names(models) <- make_selected_df$model
+    make_selected_df <- cars[which(input$make == cars$make_value),]
+    models <- make_selected_df$model_value
+    names(models) <- make_selected_df$model_label
 
     sd_question(
       type   = "select",
