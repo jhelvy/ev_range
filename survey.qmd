@@ -10,7 +10,7 @@ library(surveydown)
 
 ::: {#page1 .sd-page}
 
-Tell us about your EV
+Tell us about your vehicle
 
 ```{r}
 years <- rev(seq(2010, 2025, 1))
@@ -26,6 +26,8 @@ sd_question(
 sd_output('make', type = 'question')
 
 sd_output('model', type = 'question')
+
+sd_next()
 ```
 
 :::

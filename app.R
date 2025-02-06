@@ -4,28 +4,25 @@
 
 # Load packages
 library(surveydown)
-library(dplyr)
+library(tidyverse)
+
+# Set up car options
+
+cars <- mpg %>%
+  distinct(make = manufacturer, model) %>%
+  mutate(
+    make = str_to_title(make),
+    model = str_to_title(model)
+  )
 
 # sd_db_config()
-# sd_db_show()
-
-
-db <- sd_db_connect()
-
+db <- sd_db_connect(ignore = TRUE)
 
 # Server setup
 server <- function(input, output, session) {
 
-  cars <- data.frame(
-    make_label = c("Chevrolet", "Chevrolet", "Tesla", "Tesla"),
-    model_label = c("Bolt", "Equinox", "Model S", "Model 3")
-  )
-  cars$make_value <- tolower(cars$make_label)
-  cars$model_value <- tolower(cars$model_label)
-
-  makes_df <- distinct(cars, make_label, make_value)
-  makes <- makes_df$make_value
-  names(makes) <- makes_df$make_label
+  makes <- unique(cars$make)
+  names(makes) <- makes
 
   sd_question(
     type   = "select",
@@ -35,9 +32,9 @@ server <- function(input, output, session) {
   )
 
   observe({
-    make_selected_df <- cars[which(input$make == cars$make_value),]
-    models <- make_selected_df$model_value
-    names(models) <- make_selected_df$model_label
+    make_selected_df <- cars[which(input$make == cars$make),]
+    models <- make_selected_df$model
+    names(models) <- models
 
     sd_question(
       type   = "select",

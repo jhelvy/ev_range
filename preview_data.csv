@@ -1,2 +1,2 @@
-"session_id","time_start","time_end","year","make","model","time_q_year","time_q_make","time_q_model","time_p_page1","time_p_end"
-"4173f70df53218d35cececb7ff343b41","2025-02-04 22:39:41 UTC","2025-02-04 22:40:07 UTC","2021","tesla","model 3","2025-02-04 22:39:59 UTC","2025-02-04 22:40:00 UTC","2025-02-04 22:40:01 UTC","2025-02-04 22:39:41 UTC",
+"session_id","time_start","time_end","year","make","model","time_q_year","time_q_make","time_q_model","time_p_page1","time_p_end","current_page"
+"09c0070935066e19124f7bc0852de279","2025-02-06 16:06:14 UTC","2025-02-06 16:06:38 UTC","2023","Chevrolet","K1500 Tahoe 4wd","2025-02-06 16:06:19 UTC","2025-02-06 16:06:26 UTC","2025-02-06 16:06:27 UTC","2025-02-06 16:06:14 UTC","2025-02-06 16:06:28 UTC","end"
