@@ -1,19 +1,25 @@
 # Install required packages:
 # install.packages("pak")
 # pak::pak('surveydown-dev/surveydown') # Development version from github
+# pak::pak('tidyverse')
+# pak::pak('arrow')
 
 # Load packages
 library(surveydown)
 library(tidyverse)
 
-# Set up car options
+# Set up car make-model-trim data frame
 
-cars <- mpg %>%
-  distinct(make = manufacturer, model) %>%
-  mutate(
-    make = str_to_title(make),
-    model = str_to_title(model)
-  )
+cars <- arrow::open_dataset('data.parquet') %>%
+  filter(powertrain == 'bev') %>%
+  select(make, model, trim) %>%
+  collect() %>%
+  distinct(make, model, trim)
+
+makes <- unique(cars$make)
+names(makes) <- makes
+
+# Set up database configuration
 
 # sd_db_config()
 db <- sd_db_connect(ignore = TRUE)
@@ -21,8 +27,11 @@ db <- sd_db_connect(ignore = TRUE)
 # Server setup
 server <- function(input, output, session) {
 
-  makes <- unique(cars$make)
-  names(makes) <- makes
+  # Create reactive values to store filtered data frames
+  filtered_data <- reactiveValues(
+    make_selected_df = NULL,
+    model_selected_df = NULL
+  )
 
   sd_question(
     type   = "select",
@@ -32,8 +41,10 @@ server <- function(input, output, session) {
   )
 
   observe({
-    make_selected_df <- cars[which(input$make == cars$make),]
-    models <- make_selected_df$model
+    # Store the filtered data frame in the reactiveValues
+    filtered_data$make_selected_df <- cars[which(input$make == cars$make),]
+
+    models <- filtered_data$make_selected_df$model
     names(models) <- models
 
     sd_question(
@@ -44,10 +55,27 @@ server <- function(input, output, session) {
     )
   })
 
+  observe({
+
+    # Filter based on both make and model
+    filtered_data$model_selected_df <- filtered_data$make_selected_df[
+      which(input$model == filtered_data$make_selected_df$model),]
+
+    trims <- filtered_data$model_selected_df$trim
+    names(trims) <- trims
+
+    sd_question(
+      type   = "select",
+      id     = "trim",
+      label  = "Trim:",
+      option = trims
+    )
+  })
+
   # Database designation and other settings
   sd_server(
     db = db,
-    all_questions_required = TRUE
+    all_questions_required = FALSE
   )
 }
 
