@@ -22,7 +22,7 @@ names(makes) <- makes
 # Set up database configuration
 
 # sd_db_config()
-db <- sd_db_connect(ignore = TRUE)
+db <- sd_db_connect()
 
 # Server setup
 server <- function(input, output, session) {
