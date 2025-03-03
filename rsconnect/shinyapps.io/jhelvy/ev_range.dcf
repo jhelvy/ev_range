@@ -1,0 +1,10 @@
+name: ev_range
+title:
+username: jhelvy
+account: jhelvy
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14145373
+bundleId: 9883999
+url: https://jhelvy.shinyapps.io/ev_range/
+version: 1
